@@ -6,7 +6,7 @@
     "email": "moszeed@arcor.de",
     "url": ""
   },
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "./index",
   "dependencies": {
     "underscore": ">=1.4.3",
