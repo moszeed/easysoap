@@ -1,5 +1,5 @@
 {
-  "name": "easySoap",
+  "name": "easysoap",
   "description": "A simple to use SoapClient for Node.js",
   "author": {
     "name": "Michael Röber",
