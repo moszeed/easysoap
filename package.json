@@ -1,0 +1,26 @@
+{
+  "name": "easySoap",
+  "description": "A simple to use SoapClient for Node.js",
+  "author": {
+    "name": "Michael Röber",
+    "email": "moszeed@arcor.de",
+    "url": ""
+  },
+  "version": "0.2.1",
+  "main": "./index",
+  "dependencies": {
+    "underscore": ">=1.4.3",
+    "xmldoc"    : "0.1.1"
+  },
+  "license": {
+    "type": "MIT",
+    "url": "https://raw.github.com/moszeed/easysoap/LICENSE"
+  },
+  "contributors": [
+    {
+      "name": "Michael Röber",
+      "email": "moszeed@arcor.de"
+    }
+  ],
+  "readmeFilename": "README.md"
+}
