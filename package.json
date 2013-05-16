@@ -6,7 +6,7 @@
     "email": "moszeed@arcor.de",
     "url": ""
   },
-  "version": "0.2.3",
+  "version": "0.2.4",
   "main": "./index",
   "dependencies": {
     "underscore": ">=1.4.3",
@@ -15,7 +15,7 @@
   "keywords": ["soap", "wsdl"],
   "repository" : {
     "type":"git",
-    "url" :"https://github.com/moszeed/easysoap.git" 
+    "url" :"https://github.com/moszeed/easysoap.git"
   },
   "license": {
     "type": "MIT",
