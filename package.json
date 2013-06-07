@@ -3,19 +3,21 @@
   "description": "A simple to use Soap Client for Node.js",
   "author": {
     "name": "Michael Röber",
-    "email": "moszeed@arcor.de",
-    "url": ""
+    "email": "moszeed@arcor.de"
   },
-  "version": "0.2.5",
+  "version": "0.4",
   "main": "./index",
   "dependencies": {
     "underscore": ">=1.4.3",
-    "xmldoc"    : "0.1.1"
+    "xmldoc": "0.1.1"
   },
-  "keywords": ["soap", "wsdl"],
-  "repository" : {
-    "type":"git",
-    "url" :"https://github.com/moszeed/easysoap.git"
+  "keywords": [
+    "soap",
+    "wsdl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moszeed/easysoap.git"
   },
   "license": {
     "type": "MIT",
@@ -27,5 +29,12 @@
       "email": "moszeed@arcor.de"
     }
   ],
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "readme": "## What ?\r\n`easySoap` is a WSDL SoapClient for Node.js.\r\n\r\n## How to use ?\r\n\r\n    var _           = require('underscore');\r\n    var easySoap    = require('easySoap');\r\n\r\n    var SoapClient = new easySoap.Client({\r\n        host    : 'www.sample.com',\r\n        path    : '/dir/soap',\r\n        wsdl    : '/dir/wsdl'\r\n    });\r\n\r\n        SoapClient.once('initialized', function() {\r\n\r\n            //successful initialized\r\n\r\n\r\n            SoapClient.once('soapMethod', function(data, header) {\r\n                //soap response\r\n            });\r\n\r\n            SoapClient.call({\r\n                'method' : 'soapMethod',\r\n                'params' : {\r\n                    'test' : 1\r\n                }\r\n            });\r\n        });\r\n\r\n        SoapClient.init();",
+  "_id": "easysoap@0.2.5",
+  "dist": {
+    "shasum": "be341b84e0486e40f894b4c315b361da69ccf2c4"
+  },
+  "_from": "easysoap@0.2.5",
+  "_resolved": "https://registry.npmjs.org/easysoap/-/easysoap-0.2.5.tgz"
 }

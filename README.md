@@ -3,20 +3,34 @@
 
 ## How to use ?
 
-    var _           = require('underscore');
     var easySoap    = require('easySoap');
 
-    var SoapClient = new easySoap.Client({
+    //soap client params
+    var clientParams = {
+
+        //set soap connection data (mandatory values)
         host    : 'www.sample.com',
         path    : '/dir/soap',
-        wsdl    : '/dir/wsdl'
-    });
+        wsdl    : '/dir/wsdl',
 
+        //set soap header (optional)
+        header  : [{
+            'name'      : 'item_name',
+            'value'     : 'item_value',
+            'namespace' : 'item_namespace'
+        }]
+    };
+
+    //soap client options
+    var clientOptions = {
+        secure : true/false //is https or http
+    };
+
+    //create new soap client
+    var SoapClient = new easySoap.Client(clientParams, clientOptions);
         SoapClient.once('initialized', function() {
 
             //successful initialized
-
-
             SoapClient.once('soapMethod', function(data, header) {
                 //soap response
             });
@@ -29,4 +43,5 @@
             });
         });
 
+        //initialize soap client
         SoapClient.init();
