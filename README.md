@@ -1,6 +1,10 @@
 ## What ?
 `easySoap` is a WSDL SoapClient for Node.js.
 
+## How to get ?
+
+    npm install easysoap
+
 ## How to use ?
 
     var easySoap    = require('easySoap');
