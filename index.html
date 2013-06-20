@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Easysoap by moszeed</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Easysoap</h1>
+        <p>A simple to use SoapClient for Node.js</p>
+
+        <p class="view"><a href="https://github.com/moszeed/easysoap">View the Project on GitHub <small>moszeed/easysoap</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/moszeed/easysoap/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/moszeed/easysoap/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/moszeed/easysoap">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h2>
+<a name="what-" class="anchor" href="#what-"><span class="octicon octicon-link"></span></a>What ?</h2>
+
+<p><code>easySoap</code> is a WSDL SoapClient for Node.js.</p>
+
+<h2>
+<a name="how-to-use-" class="anchor" href="#how-to-use-"><span class="octicon octicon-link"></span></a>How to use ?</h2>
+
+<pre><code>var easySoap    = require('easySoap');
+
+//soap client params
+var clientParams = {
+
+    //set soap connection data (mandatory values)
+    host    : 'www.sample.com',
+    path    : '/dir/soap',
+    wsdl    : '/dir/wsdl',
+
+    //set soap header (optional)
+    header  : [{
+        'name'      : 'item_name',
+        'value'     : 'item_value',
+        'namespace' : 'item_namespace'
+    }]
+};
+
+//soap client options
+var clientOptions = {
+    secure : true/false //is https or http
+};
+
+//create new soap client
+var SoapClient = new easySoap.Client(clientParams, clientOptions);
+    SoapClient.once('initialized', function() {
+
+        //successful initialized
+        SoapClient.once('soapMethod', function(data, header) {
+            //soap response
+        });
+
+        SoapClient.call({
+            'method' : 'soapMethod',
+            'params' : {
+                'test' : 1
+            }
+        });
+    });
+
+    //initialize soap client
+    SoapClient.init();
+</code></pre>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/moszeed">moszeed</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
