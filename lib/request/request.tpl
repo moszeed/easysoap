@@ -24,7 +24,7 @@
 
 <soap-env:Body>
     <% if (namespace !== false) {%><ns1:<%=method%>><% } %>
-        <<%=method%>><% if (params !== false) {%><%= params%><% } %></<%=method%>>
+        <<%=method%><% if(methodNs !== false ) {%> xmlns="<%= methodNs %>" <% } %>><% if (params !== false) {%><%= params%><% } %></<%=method%>>
     <% if (namespace !== false) {%></ns1:<%=method%>><% } %>
 </soap-env:Body>
 </soap-env:Envelope>
