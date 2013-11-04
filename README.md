@@ -32,10 +32,15 @@
 
     //create new soap client
     var SoapClient = new easySoap.Client(clientParams, clientOptions);
+
+        BexSoapClient.on('error', function(error) {
+            console.log(error);
+        });
+
         SoapClient.once('initialized', function() {
 
             //successful initialized
-            SoapClient.once('soapMethod', function(data, header) {
+            SoapClient.once('soapMethod', function(err, data, header) {
                 //soap response
             });
 

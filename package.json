@@ -3,9 +3,9 @@
   "description": "A simple to use Soap Client for Node.js",
   "author": {
     "name": "Michael Röber",
-    "email": "moszeed@arcor.de"
+    "email": "moszeed@gmail.com"
   },
-  "version": "0.4.3",
+  "version": "0.5.0",
   "main": "./index",
   "dependencies": {
     "deferred"   : ">=0.6.5",
@@ -27,7 +27,7 @@
   "contributors": [
     {
       "name": "Michael Röber",
-      "email": "moszeed@arcor.de"
+      "email": "moszeed@gmail.com"
     }
   ]
 }
