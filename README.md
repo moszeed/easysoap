@@ -7,7 +7,7 @@
 
 ## How to use ?
 
-    var easySoap    = require('easySoap');
+    var easySoap    = require('easysoap');
 
     //soap client params
     var clientParams = {
