@@ -5,7 +5,7 @@
     "name": "Michael Röber",
     "email": "moszeed@gmail.com"
   },
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "./index",
   "dependencies": {
     "deferred"   : ">=0.6.5",
