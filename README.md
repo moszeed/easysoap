@@ -39,7 +39,10 @@
 
         SoapClient.once('initialized', function() {
 
-            //successful initialized
+            //after successful initialized
+
+
+            //old deprecated way, will be removed in future versions
             SoapClient.once('soapMethod', function(err, data, header) {
                 //soap response
             });
@@ -50,6 +53,24 @@
                     'test' : 1
                 }
             });
+
+
+            //new promise way
+            SoapClient.call({
+                'method' : 'soapMethod2',
+                'params' : {
+                    'test' : 2
+                }
+            })
+            .done(function(data, header) {
+                //soap response
+            }, function(err) {
+                //soap error
+            });
+
+
+
+
         });
 
         //initialize soap client
