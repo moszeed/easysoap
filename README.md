@@ -62,7 +62,11 @@
                     'test' : 2
                 }
             })
-            .done(function(data, header) {
+            .done(function(data) {
+
+                console.log(data.content); //contain soap response data
+                console.log(data.header);  //contain soap response header
+
                 //soap response
             }, function(err) {
                 //soap error
