@@ -33,49 +33,49 @@
     //create new soap client
     var SoapClient = new easySoap.Client(clientParams, clientOptions);
 
-        BexSoapClient.on('error', function(error) {
-            console.log(error);
-        });
+        SoapClient.init()
+            .done(function() {
 
-        SoapClient.once('initialized', function() {
+                SoapClient.call({
+                    'method'    : 'soapMethod2',
 
-            //after successful initialized
+                    //optional namespace for call
+                    'namespace' : 'soapMethod2Namespace',
 
+                    //optional headers for call
+                    'headers'       : {
+                        'Cookie' : 'test'
+                    },
 
-            //old deprecated way, will be removed in future versions
-            SoapClient.once('soapMethod', function(err, data, header) {
-                //soap response
+                    'params' : {
+                        'test'  : 2,
+                        'test1' : ['item1', 'item2']
+                        'test2' : {
+
+                            '_attributes'   : {
+                                'id' : 1
+                            },
+                            '_value'        : 'test1data'
+                        }
+                    }
+                })
+                .done(
+
+                    //success
+                    function(res) {
+                        res.data        // response data as array
+                        res.response    // full response data (including xml)
+                        res.header      // response header
+                    },
+
+                    //method fail
+                    function(err) {
+                        console.log(err);
+                    }
+                );
+            },
+
+            //soap client fail
+            function(err) {
+                console.log(err);
             });
-
-            SoapClient.call({
-                'method' : 'soapMethod',
-                'params' : {
-                    'test' : 1
-                }
-            });
-
-
-            //new promise way
-            SoapClient.call({
-                'method' : 'soapMethod2',
-                'params' : {
-                    'test' : 2
-                }
-            })
-            .done(function(data) {
-
-                console.log(data.content); //contain soap response data
-                console.log(data.header);  //contain soap response header
-
-                //soap response
-            }, function(err) {
-                //soap error
-            });
-
-
-
-
-        });
-
-        //initialize soap client
-        SoapClient.init();

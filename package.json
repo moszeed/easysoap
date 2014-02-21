@@ -5,12 +5,13 @@
     "name": "Michael Röber",
     "email": "moszeed@gmail.com"
   },
-  "version": "0.5.3",
+  "version": "0.5.5",
   "main": "./index",
   "dependencies": {
     "promise": ">=3.2.0",
+    "request": ">=2.33.0",
     "underscore": ">=1.4.3",
-    "xmldoc": "0.1.1"
+    "xmldoc": ">=0.1.2"
   },
   "keywords": [
     "soap",
@@ -32,10 +33,10 @@
   ],
   "readme": "## What ?\r\n`easySoap` is a WSDL SoapClient for Node.js.\r\n\r\n## How to get ?\r\n\r\n    npm install easysoap\r\n\r\n## How to use ?\r\n\r\n    var easySoap    = require('easysoap');\r\n\r\n    //soap client params\r\n    var clientParams = {\r\n\r\n        //set soap connection data (mandatory values)\r\n        host    : 'www.sample.com',\r\n        path    : '/dir/soap',\r\n        wsdl    : '/dir/wsdl',\r\n\r\n        //set soap header (optional)\r\n        header  : [{\r\n            'name'      : 'item_name',\r\n            'value'     : 'item_value',\r\n            'namespace' : 'item_namespace'\r\n        }]\r\n    };\r\n\r\n    //soap client options\r\n    var clientOptions = {\r\n        secure : true/false //is https or http\r\n    };\r\n\r\n    //create new soap client\r\n    var SoapClient = new easySoap.Client(clientParams, clientOptions);\r\n\r\n        BexSoapClient.on('error', function(error) {\r\n            console.log(error);\r\n        });\r\n\r\n        SoapClient.once('initialized', function() {\r\n\r\n            //successful initialized\r\n            SoapClient.once('soapMethod', function(err, data, header) {\r\n                //soap response\r\n            });\r\n\r\n            SoapClient.call({\r\n                'method' : 'soapMethod',\r\n                'params' : {\r\n                    'test' : 1\r\n                }\r\n            });\r\n        });\r\n\r\n        //initialize soap client\r\n        SoapClient.init();\r\n",
   "readmeFilename": "README.md",
-  "_id": "easysoap@0.5.1",
-  "_from": "easysoap@0.5.1",
+  "_id": "easysoap@0.5.3",
+  "_from": "easysoap@0.5.3",
   "dist": {
-    "shasum": "42f9655d1ffdfa9eaa4294fcdaa2347e580b22ed"
+    "shasum": "2ffd6651da0b194bf003ffe240ebe6e4ec2925da"
   },
-  "_resolved": "https://registry.npmjs.org/easysoap/-/easysoap-0.5.1.tgz"
+  "_resolved": "https://registry.npmjs.org/easysoap/-/easysoap-0.5.3.tgz"
 }

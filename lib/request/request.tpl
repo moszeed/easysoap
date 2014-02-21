@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope
-    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    <% if (namespace !== false) { %> xmlns:ns1="<%= namespace%>"<%}%>
-    <% if (header    !== false) { %>
-        <% var ns_no = 2; %>
-        <% _(header).each(function(single_header) { %>
-            <% if (single_header.namespace !== void 0) { %>
-                xmlns:ns<%= ns_no%>="<%=single_header.namespace%>"
-            <% } %>
-            <% ns_no++; %>
+    xmlns:SOAP-ENV="<%= envelope.soap_env%>"
+    xmlns:xsd="<%= envelope.xml_schema%>"
+
+    <% if (envelope.namespaces.length != 0) { %>
+        <% _.each(envelope.namespaces, function(namespace, index) { %>
+            xmlns:ns<%=index%>="<%=namespace%>"
         <% }); %>
     <% } %>>
 
-<% if (header !== false) { %>
-<SOAP-ENV:Header>
-    <% var ns_no = 2; %>
-    <% _(header).each(function(single_header) { %>
-        <<% if(single_header.namespace) {%>ns<%=ns_no%>:<%}%><%= single_header.name%>><%= single_header.value%></<% if(single_header.namespace) {%>ns<%=ns_no%>:<%}%><%= single_header.name%>>
-        <% ns_no++; %>
-    <% }); %>
-</SOAP-ENV:Header>
-<% } %>
+    <!-- available head -->
+    <% if (head.length !== 0) { %>
+        <SOAP-ENV:Header>
+            <% _.each(head, function(headItem) { %>
+                <%= headItem%>
+            <% }); %>
+        </SOAP-ENV:Header>
+    <% } %>
 
-<SOAP-ENV:Body>
-    <% if (namespace !== false) {%><ns1:<%=method%>><% } else {%> <<%=method%>> <% } %>
-        <% if (params !== false) {%><%= params%><% } %>
-    <% if (namespace !== false) {%></ns1:<%=method%>><% } else { %> </<%=method%>> <% } %>
-</SOAP-ENV:Body>
+    <SOAP-ENV:Body>
+        <% if (body.namespace !== null) {%>
+            <ns<%= body.namespace%>:<%=body.method%>>
+        <% } else {%>
+            <<%=body.method%>>
+        <% } %>
+
+            <% if (body.params !== false) {%>
+                <%= body.params%>
+            <% } %>
+
+        <% if (body.namespace !== null) {%>
+            </ns<%= body.namespace%>:<%=body.method%>>
+        <% } else { %>
+            </<%=body.method%>>
+        <% } %>
+    </SOAP-ENV:Body>
+
+
 </SOAP-ENV:Envelope>
