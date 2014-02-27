@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope
     xmlns:SOAP-ENV="<%= envelope.soap_env%>"
-    xmlns:xsd="<%= envelope.xml_schema%>"
-
-    <% if (envelope.namespaces.length != 0) { %>
-        <% _.each(envelope.namespaces, function(namespace, index) { %>
-            xmlns:ns<%=index%>="<%=namespace%>"
+    <% if (envelope.namespaces !== null) { %>
+        <% _.each(envelope.namespaces, function(namespace) { %>
+            <% if (namespace.full !== void 0) { %>
+            xmlns:<%=namespace.short%>="<%=namespace.full%>"
+            <% } %>
         <% }); %>
     <% } %>>
 
-    <!-- available head -->
-    <% if (head.length !== 0) { %>
+    <% if (head !== null) { %>
         <SOAP-ENV:Header>
             <% _.each(head, function(headItem) { %>
                 <%= headItem%>
@@ -20,7 +19,7 @@
 
     <SOAP-ENV:Body>
         <% if (body.namespace !== null) {%>
-            <ns<%= body.namespace%>:<%=body.method%>>
+            <<%= body.namespace%>:<%=body.method%>>
         <% } else {%>
             <<%=body.method%>>
         <% } %>
@@ -30,11 +29,10 @@
             <% } %>
 
         <% if (body.namespace !== null) {%>
-            </ns<%= body.namespace%>:<%=body.method%>>
+            </<%= body.namespace%>:<%=body.method%>>
         <% } else { %>
             </<%=body.method%>>
         <% } %>
     </SOAP-ENV:Body>
-
 
 </SOAP-ENV:Envelope>

@@ -33,49 +33,46 @@
     //create new soap client
     var SoapClient = new easySoap.Client(clientParams, clientOptions);
 
-        SoapClient.init()
-            .done(function() {
+        SoapClient.call({
+            'method'    : 'soapMethod2',
 
-                SoapClient.call({
-                    'method'    : 'soapMethod2',
+            //optional namespace for call
+            'namespace' : 'soapMethod2Namespace',
 
-                    //optional namespace for call
-                    'namespace' : 'soapMethod2Namespace',
-
-                    //optional headers for call
-                    'headers'       : {
-                        'Cookie' : 'test'
-                    },
-
-                    'params' : {
-                        'test'  : 2,
-                        'test1' : ['item1', 'item2']
-                        'test2' : {
-
-                            '_attributes'   : {
-                                'id' : 1
-                            },
-                            '_value'        : 'test1data'
-                        }
-                    }
-                })
-                .done(
-
-                    //success
-                    function(res) {
-                        res.data        // response data as array
-                        res.response    // full response data (including xml)
-                        res.header      // response header
-                    },
-
-                    //method fail
-                    function(err) {
-                        console.log(err);
-                    }
-                );
+            //optional headers for call
+            'headers'       : {
+                'Cookie' : 'test'
             },
 
-            //soap client fail
+            'params' : {
+
+                //default
+                'test'  : 2,
+
+                //list of items
+                'test1' : ['item1', 'item2']
+
+                //if attributes needed
+                'test2' : {
+
+                    '_attributes'   : {
+                        'id' : 1
+                    },
+                    '_value'        : 'test1data'
+                }
+            }
+        })
+        .done(
+
+            //success
+            function(res) {
+                res.data        // response data as array
+                res.response    // full response data (including xml)
+                res.header      // response header
+            },
+
+            //method fail
             function(err) {
                 console.log(err);
-            });
+            }
+        );
