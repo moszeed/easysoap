@@ -1,5 +1,5 @@
 ## What ?
-[![Join the chat at https://gitter.im/moszeed/drbx-js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moszeed/easysoap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
+[![Join the chat at https://gitter.im/moszeed/easysoap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moszeed/easysoap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 `easySoap` is a WSDL SoapClient for Node.js.
 
 
