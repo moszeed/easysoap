@@ -5,7 +5,7 @@
     "name": "Michael Röber",
     "email": "moszeed@gmail.com"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./src/easysoap.js",
   "dependencies": {
     "request": "^2.65.0",
