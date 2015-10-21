@@ -14,7 +14,7 @@
 
 #### *createClient*
 **params** createParams, soapOptions  
-**response** instance of easysoap
+**response** instance of easysoap  
 
 *createParams*
 
@@ -37,12 +37,12 @@
 ###### the following methods available after getting an *easysoap* instance with "createClient"
 
 #### *call*
-**params** callParams
-**response** callResponseObject
+**params** callParams  
+**response** callResponseObject  
 
 #### *getRequestXml*
-**params** callParams
-**response** xml (string)
+**params** callParams  
+**response** xml (string)  
 
 *callParams*
 
@@ -54,14 +54,14 @@
 
 
 #### *getXmlDataAsJson*
-**params** xml (string)
-**response** xmldata as json
+**params** xml (string)  
+**response** xmldata as json  
 
 #### *getAllFunctions*
 **response** Function Names (array)
 
 #### *getMethodParamsByName*
-**params** methodName (string)
+**params** methodName (string)  
 **response** methodParams (object)
 
 ## How to use ?
