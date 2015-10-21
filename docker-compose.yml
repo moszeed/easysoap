@@ -1,0 +1,9 @@
+
+testing:
+    build: .
+    dockerfile: Dockerfile-Testing
+    volumes:
+    - ./index.js:/easysoap/index.js
+    - ./package.json:/easysoap/package.json
+    - ./tests:/easysoap/tests
+    - ./lib:/easysoap/lib

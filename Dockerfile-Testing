@@ -1,0 +1,13 @@
+# base image
+FROM mhart/alpine-node:latest
+
+# exclude npm cache from the image
+VOLUME /root/.npm
+
+# add files ad set workdir
+COPY . /easysoap
+WORKDIR /easysoap
+
+# install dependecys, but first set oberon as registry archive
+RUN npm install
+

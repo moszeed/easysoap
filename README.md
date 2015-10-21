@@ -1,81 +1,140 @@
 ## What ?
-[![Join the chat at https://gitter.im/moszeed/easysoap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moszeed/easysoap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
-`easySoap` is a WSDL SoapClient for Node.js.
 
+**easysoap** is a WSDL SoapClient for Node.js.
+
+[![Join the chat at https://gitter.im/moszeed/easysoap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moszeed/easysoap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)  
 
 
 ## How to get ?
 
-    npm install easysoap
+    npm i easysoap
+
+
+## available methods
+
+#### *createClient*
+**params** createParams, soapOptions  
+**response** instance of easysoap
+
+*createParams*
+
+	{
+        host   			: 'www.example.com',
+        path   			: '/soap/path',
+        wsdl   			: '/wsdl/path',
+        headers			: Array or Object,
+		rejectUnauthorized : true/false
+    }
+
+*soapOptions*
+
+	{
+    	secure : true/false //is https or http
+    }
+
+
+
+###### the following methods available after getting an *easysoap* instance with "createClient"
+
+#### *call*
+**params** callParams
+**response** callResponseObject
+
+#### *getRequestXml*
+**params** callParams
+**response** xml (string)
+
+*callParams*
+
+	{
+        method    : "sampleMethodName",
+        attributes: Object of custom tag attributes for given params,
+        params	: Object/Array of params
+    }
+
+
+#### *getXmlDataAsJson*
+**params** xml (string)
+**response** xmldata as json
+
+#### *getAllFunctions*
+**response** Function Names (array)
+
+#### *getMethodParamsByName*
+**params** methodName (string)
+**response** methodParams (object)
 
 ## How to use ?
 
-    var easySoap    = require('easysoap');
+	(function() {
+		
+        "use strict";
 
-    //soap client params
-    var clientParams = {
+		var easysoap = require('easysoap');
+		
+        // define soap params
+        var params = {
+			host   : 'www.sample.com',
+			path   : '/path/soap/',
+            wsdl   : '/path/wsdl/,
 
-        //set soap connection data (mandatory values)
-        host    : 'www.sample.com',
-        path    : '/dir/soap',
-        wsdl    : '/dir/wsdl',
+			// set soap headers (optional)
+			headers: [{
+                'name'     : 'item_name',
+                'value'    : 'item_value',
+                'namespace': 'item_namespace'
+            }]
+        }
+		
+        /*
+         * create the client
+         */ 
+        var soapClient = easysoap.createClient(params);
+			
+            
+            /*
+			 * get all available functions
+        	 */
+			soapClient.getAllFunctions()
+            	.then((functionArray) => { console.log(functionArray); })
+				.catch((err) => { throw new Error(err); });
+	
 
-        //set soap header (optional)
-        header  : [{
-            'name'      : 'item_name',
-            'value'     : 'item_value',
-            'namespace' : 'item_namespace'
-        }]
-    };
+			/*
+			 * get the method params by given methodName
+             */
+    		soapClient.getMethodParamsByName('methodName')
+            	.then((methodParams) => { 
+					console.log(methodParams.request);
+					console.log(methodParams.respone); 
+				})
+				.catch((err) => { throw new Error(err); });
 
-    //soap client options
-    var clientOptions = {
-        secure : true/false //is https or http
-    };
 
-    //create new soap client
-    var SoapClient = new easySoap.Client(clientParams, clientOptions);
+			/*
+			 * call soap method
+             */
+        	soapClient.call({
+            	method    : 'methodName',
+				attributes: {
+                	xmlns: 'http://www.sample.com'
+                },
+				params: {
+					testParam: 1,
+					testParam: [2, 3],
+					testParam: {
+						'_value'     : 4,
+						'_attributes': {
+                        	'xmlns1': 'http://www.sample.com/other'
+                        }
+                    }
+                } 
+            })
+            .then((callResponse) => { 
+				console.log(callResponse.data);	// response data as json
+                console.log(callResponse.body);	// response body
+				console.log(callResponse.header);  //response header
+            })
+			.catch((err) => { throw new Error(err); });
 
-        SoapClient.call({
-            'method'    : 'soapMethod2',
-
-            //optional namespace for call
-            'namespace' : 'soapMethod2Namespace',
-
-            //optional headers for call
-            'headers'       : {
-                'Cookie' : 'test'
-            },
-
-            'params' : {
-
-                //default
-                'test'  : 2,
-
-                //list of items
-                'test1' : ['item1', 'item2']
-
-                //if attributes needed
-                'test2' : {
-
-                    '_attributes'   : {
-                        'id' : 1
-                    },
-                    '_value'        : 'test1data'
-                }
-            }
-        })
-        .done(
-
-            //success
-            function(res) {
-                res.data        // response data as array
-                res.response    // full response data (including xml)
-                res.header      // response header
-            },
-
-            //method fail
-            function(err) {
-                console.log(err);
-            }
-        );
+    }();

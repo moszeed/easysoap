@@ -5,13 +5,17 @@
     "name": "Michael Röber",
     "email": "moszeed@gmail.com"
   },
-  "version": "0.7.0",
-  "main": "./index",
+  "version": "1.0.0",
+  "main": "./src/easysoap.js",
   "dependencies": {
-    "promise": "^6.1.0",
-    "request": "^2.53.0",
-    "underscore": "^1.7.0",
-    "xmldoc": "^0.3.0"
+    "request": "^2.65.0",
+    "underscore": "^1.8.3",
+    "xmldoc": "^0.3.2",
+    "wsdlrdr": "^0.3.5"
+  },
+  "devDependencies": {
+    "tap-spec": "^4.1.0",
+    "tape"    : "^4.2.2"
   },
   "keywords": [
     "soap",
@@ -21,10 +25,13 @@
     "type": "git",
     "url": "https://github.com/moszeed/easysoap.git"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://raw.github.com/moszeed/easysoap/master/LICENSE"
+  "engines" : {
+    "node" : ">=4.0.0"
   },
+  "scripts": {
+    "test": "node ./tests/tests.js | tap-spec"
+  },
+  "license": "MIT",
   "contributors": [
     {
       "name": "Michael Röber",
