@@ -15,6 +15,25 @@
         fs.readFileSync(__dirname + path.sep + 'request.tpl', 'utf-8')
     );
 
+    function baseParamsToRequestParams(baseParams) {
+
+        var requestParams = _.extend({}, baseParams);
+
+        if (requestParams.headers) {
+            if (_.isArray(requestParams.headers)) {
+
+                requestParams.headers = _.reduce(requestParams.headers,
+                    (store, headerItem) => {
+                        store[headerItem.name] = headerItem.value;
+                        return store;
+                    },
+                {});
+            }
+        }
+
+        return requestParams;
+    }
+
     function getProtocol(opts) {
 
         opts = opts || {};
@@ -105,7 +124,7 @@
             });
         };
 
-        return wsdlrdr.getMethodParamsByName(callParams.method, baseParams, opts)
+        return wsdlrdr.getMethodParamsByName(callParams.method, baseParamsToRequestParams(baseParams), opts)
             .then((methodParams) => {
 
                 var requestParams = methodParams.request;
