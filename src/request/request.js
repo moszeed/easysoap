@@ -84,7 +84,7 @@
             }
 
             // array value given, then create item for every value
-            if (_.isArray(value) && !_.isObject(value)) {
+            if (_.isArray(value)) {
                 return _.map(value,
                     (valueItem) => getParamAsString(valueItem, name, paramData, attributes)
                 ).join('');
