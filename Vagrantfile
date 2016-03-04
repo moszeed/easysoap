@@ -4,7 +4,7 @@
 #original: https://gist.github.com/lmakarov/54302df8ecfc87b36320
 $install_docker_compose = <<EOF
 
-    DOCKER_COMPOSE_VERSION=1.4.1
+    DOCKER_COMPOSE_VERSION=1.6.2
 
     # Download docker-compose to the permanent storage
     echo 'Downloading docker-compose to the permanent VM storage...'
@@ -24,6 +24,15 @@ $install_docker_compose = <<EOF
 
 EOF
 
+$build_project = <<EOF
+
+    echo "Build Project";
+
+    cd /easysoap
+    docker-compose build --no-cache
+EOF
+
+
 $run_docker_compose = <<EOF
 
     echo "wait 5 seconds"
@@ -34,6 +43,24 @@ $run_docker_compose = <<EOF
     if [ -n "$DOCKER_DANGLING_IMAGES" ]; then
         docker rmi -f $DOCKER_DANGLING_IMAGES
     fi
+
+    # show used docker & nodejs version
+    echo "\n"
+    echo "------------------------------------------"
+    docker --version
+    echo "------------------------------------------"
+    echo "Node.js version"
+    docker run easysoap_testing node -v
+    echo "------------------------------------------"
+    echo "NPM version"
+    docker run easysoap_testing npm -v
+    echo "------------------------------------------"
+    echo "NPM outdated (global)"
+    docker run easysoap_testing npm outdated -g
+    echo "------------------------------------------"
+    echo "NPM outdated (project)"
+    docker run easysoap_testing npm outdated
+    echo "------------------------------------------"
 
     cd /easysoap
     docker-compose up -d
@@ -58,9 +85,11 @@ Vagrant.configure(2) do |config|
         easysoap.vm.synced_folder ".", "/easysoap"
         easysoap.vm.synced_folder ".", "/vagrant", disabled: true
 
-        #scripts
+        #build project
         easysoap.vm.provision :shell, inline: $install_docker_compose
+        easysoap.vm.provision :shell, inline: $build_project
         easysoap.vm.provision :shell, inline: $run_docker_compose, run: "always", :privileged => false
+
 
     end
 

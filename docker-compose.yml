@@ -2,6 +2,7 @@
 testing:
     build: .
     dockerfile: Dockerfile-Testing
+    container_name: easysoap_test
     volumes:
     - ./index.js:/easysoap/index.js
     - ./package.json:/easysoap/package.json

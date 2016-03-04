@@ -11,3 +11,5 @@ WORKDIR /easysoap
 # install dependecys, but first set oberon as registry archive
 RUN npm install
 
+#launch dev environment
+CMD npm t
