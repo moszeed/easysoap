@@ -5,13 +5,13 @@
     "name": "Michael Röber",
     "email": "moszeed@gmail.com"
   },
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "./src/easysoap.js",
   "dependencies": {
-    "request": "^2.65.0",
+    "request": "^2.69.0",
     "underscore": "^1.8.3",
-    "xmldoc": "^0.3.2",
-    "wsdlrdr": "^0.3.7"
+    "xmldoc": "^0.4.0",
+    "wsdlrdr": "^0.3.8"
   },
   "devDependencies": {
     "tap-spec": "^4.1.0",
