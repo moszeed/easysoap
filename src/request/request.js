@@ -96,7 +96,7 @@
                 var valueAsString = _.map(value,
                     (valueItem, valueKey) => {
 
-                        if (_.isObject(valueItem)) {
+                        if (!_.isArray(valueItem) && _.isObject(valueItem)) {
                             var valueItem = _.map(valueItem, (valueItemItem, valueKeyKey) => {
                                 return getParamAsString(valueItemItem, valueKeyKey, paramData[name], attributes);
                             }).join('');
