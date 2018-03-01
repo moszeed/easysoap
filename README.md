@@ -1,40 +1,39 @@
-## What ?
+# EasySoap
 
 **easysoap** is a WSDL SoapClient for Node.js.
 
-[![Join the chat at https://gitter.im/moszeed/easysoap](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moszeed/easysoap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-
 ## How to get ?
-
+install with npm
     npm i easysoap
 
+## Usage
 
-## available methods
+### get a soapclient instance
 
-#### *createClient*
+    const EasySoap = require('easysoap');
+    const soapClient = EasySoap(params, opts);
+
 **params** createParams, soapOptions
 **response** instance of easysoap
 
+##### possible parameter data
 *createParams*
 
-	{
-        host   			: 'www.example.com',
-        path   			: '/soap/path',
-        wsdl   			: '/wsdl/path',
-        headers			: Array or Object,
-		rejectUnauthorized : true/false
+    {
+        host               : 'www.example.com',
+        path               : '/soap/path',
+        wsdl               : '/wsdl/path',
+        headers            : Array or Object,
+        rejectUnauthorized : true/false
     }
 
 *soapOptions*
 
-	{
-    	secure : true/false //is https or http
+    {
+        secure : true/false //is https or http
     }
 
-
-
-###### the following methods available after getting an *easysoap* instance with "createClient"
+###### the following methods available after creating an soapclient instance with *easysoap*
 
 #### *call*
 **params** callParams
@@ -47,10 +46,10 @@
 *callParams*
 
 	{
-        method    : "sampleMethodName",
-        attributes: Object of custom tag attributes for given params,
-        params	: Object/Array of params
-    }
+	    method    : "sampleMethodName",
+	    attributes: Object of custom tag attributes for given params,
+	    params	: Object/Array of params
+	}
 
 
 #### *getXmlDataAsJson*
@@ -64,77 +63,73 @@
 **params** methodName (string)
 **response** methodParams (object)
 
-## How to use ?
+## Examples
 
-	(function() {
+	(() => {
+	    'use strict';
+	    const EasySoap = require('easysoap');
 
-        "use strict";
+	    // define soap params
+	    const params = {
+		   host: 'www.sample.com',
+		   path: '/path/soap/',
+		   wsdl: '/path/wsdl/',
 
-		var easysoap = require('easysoap');
+		   // set soap headers (optional)
+		   headers: [{
+		       'name'      : 'item_name',
+	            'value'    : 'item_value',
+	            'namespace': 'item_namespace'
+	       }]
+	    }
 
-        // define soap params
-        var params = {
-			host   : 'www.sample.com',
-			path   : '/path/soap/',
-            wsdl   : '/path/wsdl/',
-
-			// set soap headers (optional)
-			headers: [{
-                'name'     : 'item_name',
-                'value'    : 'item_value',
-                'namespace': 'item_namespace'
-            }]
-        }
-
-        /*
-         * create the client
-         */
-        var soapClient = easysoap.createClient(params);
+	    /*
+	     * create the client
+	     */
+	    var soapClient = EasySoap(params);
 
 
-            /*
-			 * get all available functions
-        	 */
-			soapClient.getAllFunctions()
-            	.then((functionArray) => { console.log(functionArray); })
-				.catch((err) => { throw new Error(err); });
+    /*
+     * get all available functions
+     */
+    soapClient.getAllFunctions()
+       .then((functionArray) => { console.log(functionArray); })
+       .catch((err) => { throw new Error(err); });
 
 
-			/*
-			 * get the method params by given methodName
-             */
-    		soapClient.getMethodParamsByName('methodName')
-            	.then((methodParams) => {
-					console.log(methodParams.request);
-					console.log(methodParams.response);
-				})
-				.catch((err) => { throw new Error(err); });
+	/*
+	 * get the method params by given methodName
+	 */
+	soapClient.getMethodParamsByName('methodName')
+	   .then((methodParams) => {
+	      console.log(methodParams.request);
+	      console.log(methodParams.response);
+	    })
+	    .catch((err) => { throw new Error(err); });
 
 
-			/*
-			 * call soap method
-             */
-        	soapClient.call({
-            	method    : 'methodName',
-				attributes: {
-                	xmlns: 'http://www.sample.com'
-                },
-				params: {
-					testParam: 1,
-					testParam: [2, 3],
-					testParam: {
-						'_value'     : 4,
-						'_attributes': {
-                        	'xmlns1': 'http://www.sample.com/other'
-                        }
-                    }
-                }
-            })
-            .then((callResponse) => {
-				console.log(callResponse.data);	// response data as json
-                console.log(callResponse.body);	// response body
-				console.log(callResponse.header);  //response header
-            })
-			.catch((err) => { throw new Error(err); });
-
-    }();
+	/*
+	 * call soap method
+	 */
+	soapClient.call({
+	   method    : 'methodName',
+	   attributes: {
+	      xmlns: 'http://www.sample.com'
+	   },
+	   params: {
+	      testParam: 1,
+	      testParam: [2, 3],
+	      testParam: {
+	         '_value'     : 4,
+	         '_attributes': {
+	             'xmlns1': 'http://www.sample.com/other'
+	         }
+	      }
+	   }
+	})
+	.then((callResponse) => {
+	    console.log(callResponse.data);	// response data as json
+	    console.log(callResponse.body);	// response body
+	    console.log(callResponse.header);  //response header
+	})
+	.catch((err) => { throw new Error(err); });
