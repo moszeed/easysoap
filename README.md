@@ -2,9 +2,18 @@
 
 **easysoap** is a WSDL SoapClient for Node.js.
 
+##### Support
+
+##### [Buy me a Coffee](https://www.patreon.com/moszeed)
+
+
+
 ## How to get ?
 install with npm
-    npm i easysoap
+
+```shell
+npm i easysoap
+```
 
 ## Usage
 
@@ -13,7 +22,7 @@ install with npm
     const EasySoap = require('easysoap');
     const soapClient = EasySoap(params, opts);
 
-**params** createParams, soapOptions
+**params** createParams, soapOptions  
 **response** instance of easysoap
 
 ##### possible parameter data
@@ -36,12 +45,12 @@ install with npm
 ###### the following methods available after creating an soapclient instance with *easysoap*
 
 #### *call*
-**params** callParams
-**response** callResponseObject
+**params** callParams  
+**response** callResponseObject   
 
 #### *getRequestXml*
-**params** callParams
-**response** xml (string)
+**params** callParams  
+**response** xml (string)  
 
 *callParams*
 
@@ -53,14 +62,14 @@ install with npm
 
 
 #### *getXmlDataAsJson*
-**params** xml (string)
+**params** xml (string)  
 **response** xmldata as json
 
 #### *getAllFunctions*
 **response** Function Names (array)
 
 #### *getMethodParamsByName*
-**params** methodName (string)
+**params** methodName (string)  
 **response** methodParams (object)
 
 ## Examples
@@ -68,13 +77,13 @@ install with npm
 	(() => {
 	    'use strict';
 	    const EasySoap = require('easysoap');
-
+	
 	    // define soap params
 	    const params = {
 		   host: 'www.sample.com',
 		   path: '/path/soap/',
 		   wsdl: '/path/wsdl/',
-
+	
 		   // set soap headers (optional)
 		   headers: [{
 		       'name'      : 'item_name',
@@ -82,7 +91,7 @@ install with npm
 	            'namespace': 'item_namespace'
 	       }]
 	    }
-
+	
 	    /*
 	     * create the client
 	     */
