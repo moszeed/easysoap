@@ -226,9 +226,13 @@
 
         // add custom headers
         if (params.headers) {
-            params.headers.forEach((headerItem) => {
-                self._headers[headerItem.name] = headerItem.value;
-            });
+            if (Array.isArray(params.headers)) {
+                params.headers.forEach((headerItem) => {
+                    self._headers[headerItem.name] = headerItem.value;
+                });
+            } else {
+                self._headers = params.headers;
+            }
         }
 
         const requestXml = await self.getRequestXml(params, this._params, this._opts);

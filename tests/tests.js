@@ -73,9 +73,7 @@
                 }
             };
 
-            const requestXML = await soapClient.instance.getRequestXml(callParams);
             const response = await soapClient.instance.call(callParams);
-
             t.ok(response.data.NumberToDollarsResponse.NumberToDollarsResult, 'got a number conversion');
             t.end();
         } catch (err) {
