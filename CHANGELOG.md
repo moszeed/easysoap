@@ -1,5 +1,8 @@
 # easysoap changelog
 
+## 2.0.1
+* bugfix: "getRequestXml" is not defined on SoapRequest
+
 ## 2.0.0
 urgent needed cleanup release,
 * everything is now prototype based, much cleaner

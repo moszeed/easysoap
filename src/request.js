@@ -186,7 +186,19 @@
             .map((item, index) => `<cns${index}:${item.name}>${item.value}</cns${index}:${item.name}>`);
     }
 
-    async function getRequestXml (params = {}, defaultParams = {}, opts = {}) {
+    function SoapRequest (params = {}, opts = {}) {
+        if (!(this instanceof SoapRequest)) return new SoapRequest(params, opts);
+
+        this._url = getProtocol(opts) + params.host + params.path;
+        this._headers = {
+            'Content-Type': 'text/xml; charset=utf-8'
+        };
+
+        this._opts = opts;
+        this._params = params;
+    };
+
+    SoapRequest.prototype.getRequestXml = async function (params = {}, defaultParams = {}, opts = {}) {
         const combinedParams = Object.assign({}, defaultParams, params);
 
         const head = await getRequestHeadParams(combinedParams);
@@ -209,18 +221,6 @@
         return `<?xml version="1.0" encoding="UTF-8"?>${$soapEnvelope}`;
     };
 
-    function SoapRequest (params = {}, opts = {}) {
-        if (!(this instanceof SoapRequest)) return new SoapRequest(params, opts);
-
-        this._url = getProtocol(opts) + params.host + params.path;
-        this._headers = {
-            'Content-Type': 'text/xml; charset=utf-8'
-        };
-
-        this._opts = opts;
-        this._params = params;
-    };
-
     SoapRequest.prototype.call = async function (params = {}) {
         const self = this;
 
@@ -231,7 +231,7 @@
             });
         }
 
-        const requestXml = await getRequestXml(params, this._params, this._opts);
+        const requestXml = await self.getRequestXml(params, this._params, this._opts);
         const result = await asyncRequest({
             url               : this._url,
             body              : requestXml,

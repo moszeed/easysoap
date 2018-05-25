@@ -6,14 +6,6 @@
 
     var soapTestDataArray = [
         [{
-            host   : 'www.webservicex.net',
-            path   : '/globalweather.asmx',
-            wsdl   : '/globalweather.asmx?WSDL',
-            headers: {
-                'SOAPAction': 'http://www.webserviceX.NET/GetWeather'
-            }
-        }],
-        [{
             host: 'webservices.oorsprong.org',
             path: '/websamples.countryinfo/CountryInfoService.wso',
             wsdl: '/websamples.countryinfo/CountryInfoService.wso?WSDL'
@@ -52,13 +44,11 @@
 
     test('getAllFunctions', async (t) => {
         try {
-            const runtime = soapClients.map(
-                (soapClient) => soapClient.instance.getAllFunctions().then((functionArray) => {
-                    var arrLength = functionArray.length;
-                    t.ok(arrLength !== 0, `${arrLength} functions (${soapClient.instance._params.host})`);
-                })
-            );
-            await Promise.all(runtime);
+            for (let soapClient of soapClients) {
+                t.comment(`=> ${soapClient.instance._params.host}`);
+                let functionsAsArray = await soapClient.instance.getAllFunctions();
+                t.ok(functionsAsArray.length !== 0, `${functionsAsArray.length} functions (${soapClient.instance._params.host})`);
+            }
 
             t.end();
         } catch (err) {
@@ -73,7 +63,7 @@
                 t.end('no soap client available');
             }
 
-            const response = await soapClient.instance.call({
+            const callParams = {
                 method    : 'NumberToDollars',
                 attributes: {
                     xmlns: 'http://www.dataaccess.com/webservicesserver/'
@@ -81,7 +71,10 @@
                 params: {
                     'dNum': 255
                 }
-            });
+            };
+
+            const requestXML = await soapClient.instance.getRequestXml(callParams);
+            const response = await soapClient.instance.call(callParams);
 
             t.ok(response.data.NumberToDollarsResponse.NumberToDollarsResult, 'got a number conversion');
             t.end();
