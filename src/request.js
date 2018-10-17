@@ -208,7 +208,7 @@
         const $namespaces = envelope.namespaces.map((namespace) => `xmlns:${namespace.short}="${namespace.full}"`);
         const $namespacesAsString = $namespaces.join(' ');
 
-        const $head = (head !== null) ? head.map((headItem) => headItem) : '';
+        const $head = (head !== null) ? `<SOAP-ENV:Header>${head.map((headItem) => headItem)}</SOAP-ENV:Header>` : '';
         const $body = `<SOAP-ENV:Body>${body}</SOAP-ENV:Body>`;
 
         const $soapEnvelope = `<SOAP-ENV:Envelope
