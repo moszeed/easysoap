@@ -1,5 +1,8 @@
 # easysoap changelog
 
+## 2.0.2
+* bugfix: readd missing "SOAP-HEADER" tag
+
 ## 2.0.1
 * bugfix: "getRequestXml" is not defined on SoapRequest
 
