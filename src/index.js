@@ -90,7 +90,13 @@
         if (methodParams.response[0]) {
             if (dataAsJson[methodParams.response[0].name]) {
                 dataAsJson = dataAsJson[methodParams.response[0].name];
+            } else if (dataAsJson[methodParams.response[0].element]) {
+                dataAsJson = dataAsJson[methodParams.response[0].element];
             }
+        }
+
+        if (Array.isArray(dataAsJson) && dataAsJson.length === 1) {
+            dataAsJson = dataAsJson[0];
         }
 
         return {
