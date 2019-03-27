@@ -1,5 +1,8 @@
 # easysoap changelog
 
+## 2.2.0
+* change: output gets more flatten
+
 ## 2.1.0
 * bugfix: headers not interpreted
 * bugfix: attributes will not be set
