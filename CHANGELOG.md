@@ -1,5 +1,9 @@
 # easysoap changelog
 
+## 2.1.0
+* bugfix: headers not interpreted
+* bugfix: attributes will not be set
+
 ## 2.0.2
 * bugfix: readd missing "SOAP-HEADER" tag
 
