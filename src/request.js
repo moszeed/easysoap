@@ -2,6 +2,8 @@
     'use strict';
 
     const _ = require('underscore');
+
+    const assert = require('assert');
     const request = require('request');
     const wsdlrdr = require('wsdlrdr');
 
@@ -44,96 +46,92 @@
         return requestParams;
     }
 
-    function getRequestParamsAsString (callParams, baseParams, opts) {
-        var getTagAttributes = function (attributes) {
-            return ' ' + _.map(attributes,
-                (attributeValue, attributeKey) => {
-                    return attributeKey + '="' + attributeValue + '"';
-                }
-            ).join(' ');
-        };
+    function getTagAttributes (attributes = {}) {
+        const attributeKeys = Object.keys(attributes);
+        if (attributeKeys.length === 0) {
+            return '';
+        }
 
-        var getParamAsString = function (value, name, paramData, attributes) {
-            paramData = paramData || {};
+        return ' ' + attributeKeys
+            .map((key) => `${key}="${attributes[key]}"`)
+            .join(' ');
+    };
 
-            var namespace = '';
-            if (paramData) {
-                if (paramData.namespace) {
-                    namespace = paramData.namespace + ':';
-                }
+    function getParamAsString (key, value, paramData = {}, attributes = {}) {
+        // array value given, then create item for every value
+        if (Array.isArray(value)) {
+            return value
+                .map((valueItem) => getParamAsString(key, valueItem, paramData, attributes))
+                .join('');
+        }
+
+        // handle objects
+        if (Object(value) === value) {
+            if (value._value ||
+                value._attributes) {
+                attributes = Object.assign({}, attributes, value._attributes || {});
+                value = value._value || '';
+            } else {
+                value = Object.keys(value)
+                    .map((valueKey) => getParamAsString(valueKey, value[valueKey], paramData, attributes))
+                    .join('');
             }
+        }
 
-            // get underline parameter values
-            var attributesString = '';
-            if (_.isObject(value)) {
-                if (value._attributes) {
-                    attributesString = getTagAttributes(value._attributes);
-                }
-
-                if (value._value) {
-                    value = value._value;
-                }
+        // add namespace to tag
+        let namespace = '';
+        if (paramData) {
+            if (paramData.namespace) {
+                namespace = paramData.namespace + ':';
             }
+        }
 
-            // array value given, then create item for every value
-            if (_.isArray(value)) {
-                return _.map(value,
-                    (valueItem) => getParamAsString(valueItem, name, paramData, attributes)
-                ).join('');
+        // add attributes to tag
+        let attributesString = '';
+        if (attributes) {
+            attributesString = getTagAttributes(attributes);
+        }
+
+        return `<${namespace}${key}${attributesString}>${value}</${namespace}${key}>`;
+    }
+
+    function getMethodParamRequestString (requestParams, paramKey, callParams) {
+        // got request param attributes
+        let methodRequestParams = {};
+        for (const requestParamsAttributes of requestParams) {
+            if (requestParamsAttributes.params) {
+                methodRequestParams = requestParamsAttributes.params
+                    .find((requestParamItem) =>
+                        requestParamItem.name === paramKey ||
+                        requestParamItem.element === paramKey);
             }
+        }
 
-            // object value given, create a string for object
-            if (_.isObject(value)) {
-                var valueAsString = _.map(value,
-                    (valueItem, valueKey) => {
-                        if (_.isObject(valueItem)) {
-                            valueItem = _.map(valueItem, (valueItemItem, valueKeyKey) => {
-                                return getParamAsString(valueItemItem, valueKeyKey, paramData[name], attributes);
-                            }).join('');
-                        }
+        const paramValue = callParams.params[paramKey];
+        const mergedAttributes = Object.assign({}, callParams.attributes, paramValue._attributes || {});
 
-                        return getParamAsString(valueItem, valueKey, paramData[name], attributes);
-                    }
-                ).join('');
+        return getParamAsString(
+            paramKey,
+            paramValue,
+            methodRequestParams,
+            mergedAttributes
+        );
+    }
 
-                return getParamAsString(valueAsString, name, paramData, attributes);
-            }
+    async function getRequestParamsAsString (callParams = {}, baseParams = {}, opts = {}) {
+        assert.ok(callParams.method, 'no method given');
 
-            // add global attributes
-            if (attributes) {
-                attributesString += getTagAttributes(attributes);
-            }
+        const methodParams = await wsdlrdr.getMethodParamsByName(callParams.method, baseParamsToRequestParams(baseParams), opts);
+        const requestParams = methodParams.request;
 
-            return `<${namespace}${name}${attributesString}>${value}</${namespace}${name}>`;
-        };
+        const responseArray = [];
+        for (const paramKey of Object.keys(callParams.params)) {
+            responseArray.push(
+                getMethodParamRequestString(requestParams, paramKey, callParams)
+            );
+        }
 
-        return wsdlrdr.getMethodParamsByName(callParams.method, baseParamsToRequestParams(baseParams), opts)
-            .then((methodParams) => {
-                var requestParams = methodParams.request;
-
-                if (!callParams.params.hasOwnProperty(callParams.method)) {
-                    var topObject = {};
-                    topObject[callParams.method] = callParams.params;
-
-                    callParams.params = topObject;
-                }
-
-                var result = _.map(callParams.params,
-                    (paramValue, paramName) => {
-                        var methodRequestParams = _.findWhere(requestParams, { 'element': paramName });
-                        if (!methodRequestParams) {
-                            methodRequestParams = _.findWhere(requestParams, { 'name': paramName });
-                        }
-
-                        return getParamAsString(paramValue, paramName,
-                            methodRequestParams,
-                            callParams.attributes
-                        );
-                    }
-                );
-
-                return result.join('');
-            });
+        return getParamAsString(callParams.method, responseArray.join(''), null, callParams.attributes);
     }
 
     function getRequestEnvelopeParams (params, opts) {
@@ -172,14 +170,14 @@
             return null;
         }
 
-        if (!_.isArray(params.headers) &&
-            _.isObject(params.headers)) {
-            var keyName = _.keys(params.headers)[0];
-
-            params.headers = [{
-                name : keyName,
-                value: params.headers[keyName]
-            }];
+        if (!Array.isArray(params.headers) &&
+            params.headers === Object(params.headers)) {
+            params.headers = Object.keys(params.headers).map((key) => {
+                return {
+                    name : key,
+                    value: params.headers[key]
+                };
+            });
         }
 
         return params.headers
@@ -208,7 +206,7 @@
         const $namespaces = envelope.namespaces.map((namespace) => `xmlns:${namespace.short}="${namespace.full}"`);
         const $namespacesAsString = $namespaces.join(' ');
 
-        const $head = (head !== null) ? `<SOAP-ENV:Header>${head.map((headItem) => headItem)}</SOAP-ENV:Header>` : '';
+        const $head = (head !== null) ? `<SOAP-ENV:Header>${head.join('')}</SOAP-ENV:Header>` : '';
         const $body = `<SOAP-ENV:Body>${body}</SOAP-ENV:Body>`;
 
         const $soapEnvelope = `<SOAP-ENV:Envelope

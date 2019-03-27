@@ -128,4 +128,151 @@
             t.end(err);
         }
     });
+
+    test('getRequestXml.simple', async (t) => {
+        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+        if (!soapClient) {
+            t.end('no soap client available');
+        }
+
+        const xml = await soapClient.instance.getRequestXml({
+            method : 'NumberToDollars',
+            headers: {
+                header1: 'header-data1',
+                header2: 'header-data2',
+                header3: 'header-data3'
+            },
+            params: {
+                testParam1: 1,
+                testParam2: [2, 3]
+            }
+        });
+
+        const json = soapClient.instance.getXmlDataAsJson(xml);
+
+        t.ok(json.NumberToDollars, 'no "NumberToDollars" key');
+        t.ok(json.NumberToDollars.filter((i) => i['testParam1']).length === 1, 'found testParam1 only once');
+        t.ok(json.NumberToDollars.some((i) => i['testParam1'] && i['testParam1'] === '1'), 'testParam1 has value 1');
+
+        t.ok(json.NumberToDollars.filter((i) => i['testParam2']).length === 1, 'found testParam2 only once');
+        t.ok(json.NumberToDollars.some((i) => i['testParam2'] && i['testParam2'].length === 2), 'testParam2 has only 2 items');
+        t.ok(json.NumberToDollars.some((i) => i['testParam2'] && i['testParam2'].includes('2')), 'testParam2 has value 2');
+        t.ok(json.NumberToDollars.some((i) => i['testParam2'] && i['testParam2'].includes('3')), 'testParam2 has value 3');
+
+        t.end();
+    });
+
+    test('getRequestXml.base', async (t) => {
+        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+        if (!soapClient) {
+            t.end('no soap client available');
+        }
+
+        const xml = await soapClient.instance.getRequestXml({
+            method    : 'NumberToDollars',
+            attributes: {
+                globalAttr1: '1111',
+                globalAttr2: '2222'
+            },
+            headers: {
+                header1: 'header-data1',
+                header2: 'header-data2',
+                header3: 'header-data3'
+            },
+            params: {
+                testParam1: 1,
+                testParam2: [2, 3],
+                testParam3: {
+                    '_value'     : 4,
+                    '_attributes': {
+                        'attr1': '123',
+                        'attr2': '456',
+                        'attr3': '789'
+                    }
+                },
+                testParam4: {
+                    '_attributes': {
+                        'attr1': '123',
+                        'attr2': '456',
+                        'attr3': '789'
+                    }
+                }
+            }
+        });
+
+        const json = soapClient.instance.getXmlDataAsJson(xml);
+
+        t.ok(json.NumberToDollars, 'no "NumberToDollars" key');
+        t.ok(json.NumberToDollars.filter((i) => i['testParam1']).length === 1, 'found testParam1 only once');
+        t.ok(json.NumberToDollars.filter((i) => i['testParam2']).length === 1, 'found testParam2 only once');
+        t.ok(json.NumberToDollars.filter((i) => i['testParam3']).length === 1, 'found testParam3 only once');
+        t.ok(json.NumberToDollars.filter((i) => i['testParam4']).length === 1, 'found testParam4 only once');
+
+        t.end();
+    });
+
+    test('getRequestXml.base-deep', async (t) => {
+        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+        if (!soapClient) {
+            t.end('no soap client available');
+        }
+
+        const xml = await soapClient.instance.getRequestXml({
+            method    : 'NumberToDollars',
+            attributes: {
+                globalAttr1: '1111',
+                globalAttr2: '2222'
+            },
+            params: {
+                testParam1: {
+                    testParam1Deep: {
+                        '_value'     : 4,
+                        '_attributes': {
+                            'attr1': '123',
+                            'attr2': '456',
+                            'attr3': '789'
+                        }
+                    }
+                }
+            }
+        });
+
+        const json = soapClient.instance.getXmlDataAsJson(xml);
+
+        t.ok(json.NumberToDollars, '"NumberToDollars" key');
+        t.ok(json.NumberToDollars.testParam1, '"testParam1" key');
+        t.ok(json.NumberToDollars.testParam1.testParam1Deep, '"testParam1Deep" key');
+
+        t.end();
+    });
+
+    test('getRequestXml.special', async (t) => {
+        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+        if (!soapClient) {
+            t.end('no soap client available');
+        }
+
+        const xml = await soapClient.instance.getRequestXml({
+            method: 'NumberToDollars',
+            params: {
+                request: {
+                    locale: {
+                        _attributes: {
+                            country            : 'DE',
+                            datCountryIndicator: 'DE',
+                            language           : 'de'
+                        }
+                    },
+                    sessionID  : null,
+                    restriction: 'ALL'
+                }
+            }
+        });
+
+        const json = soapClient.instance.getXmlDataAsJson(xml);
+        t.ok(json.NumberToDollars, '"NumberToDollars" key');
+        t.ok(json.NumberToDollars.request, '"request" key');
+
+        t.end();
+    });
 })();
