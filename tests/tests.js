@@ -5,35 +5,41 @@
     const EasySoap = require('..');
 
     var soapTestDataArray = [
-        [{
-            host: 'webservices.oorsprong.org',
-            path: '/websamples.countryinfo/CountryInfoService.wso',
-            wsdl: '/websamples.countryinfo/CountryInfoService.wso?WSDL'
-        }],
-        [{
-            host: 'webservices.daehosting.com',
-            path: '/services/isbnservice.wso',
-            wsdl: '/services/isbnservice.wso?WSDL'
-        }],
-        [{
-            host: 'www.dataaccess.com',
-            path: '/webservicesserver/numberconversion.wso',
-            wsdl: '/webservicesserver/numberconversion.wso?WSDL'
-        }]
+        [
+            {
+                host: 'webservices.oorsprong.org',
+                path: '/websamples.countryinfo/CountryInfoService.wso',
+                wsdl: '/websamples.countryinfo/CountryInfoService.wso?WSDL'
+            }
+        ],
+        [
+            {
+                host: 'webservices.daehosting.com',
+                path: '/services/isbnservice.wso',
+                wsdl: '/services/isbnservice.wso?WSDL'
+            }
+        ],
+        [
+            {
+                host: 'www.dataaccess.com',
+                path: '/webservicesserver/numberconversion.wso',
+                wsdl: '/webservicesserver/numberconversion.wso?WSDL'
+            }
+        ]
     ];
 
     // store all soap clients
     var soapClients = [];
 
-    test('createClient', (t) => {
-        soapTestDataArray.forEach((soapTestDataItem) => {
-            let connectionData = soapTestDataItem[0];
-            let soapOptions = soapTestDataItem[1] || {};
+    test('createClient', t => {
+        soapTestDataArray.forEach(soapTestDataItem => {
+            const connectionData = soapTestDataItem[0];
+            const soapOptions = soapTestDataItem[1] || {};
 
-            let soapClient = EasySoap(connectionData, soapOptions);
+            const soapClient = EasySoap(connectionData, soapOptions);
             soapClients.push({
-                'url'     : connectionData.host + connectionData.path,
-                'instance': soapClient
+                url     : connectionData.host + connectionData.path,
+                instance: soapClient
             });
 
             t.ok(true, 'soapClient create for ' + connectionData.host);
@@ -42,12 +48,17 @@
         t.end();
     });
 
-    test('getAllFunctions', async (t) => {
+    test('getAllFunctions', async t => {
         try {
-            for (let soapClient of soapClients) {
+            for (const soapClient of soapClients) {
                 t.comment(`=> ${soapClient.instance._params.host}`);
-                let functionsAsArray = await soapClient.instance.getAllFunctions();
-                t.ok(functionsAsArray.length !== 0, `${functionsAsArray.length} functions (${soapClient.instance._params.host})`);
+                const functionsAsArray = await soapClient.instance.getAllFunctions();
+                t.ok(
+                    functionsAsArray.length !== 0,
+                    `${functionsAsArray.length} functions (${
+                        soapClient.instance._params.host
+                    })`
+                );
             }
 
             t.end();
@@ -56,9 +67,13 @@
         }
     });
 
-    test('www.dataaccess.com/webservicesserver/numberconversion.wso', async (t) => {
+    test('www.dataaccess.com/webservicesserver/numberconversion.wso', async t => {
         try {
-            const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+            const soapClient = soapClients.find(
+                item =>
+                    item.url ===
+          'www.dataaccess.com/webservicesserver/numberconversion.wso'
+            );
             if (!soapClient) {
                 t.end('no soap client available');
             }
@@ -69,21 +84,27 @@
                     xmlns: 'http://www.dataaccess.com/webservicesserver/'
                 },
                 params: {
-                    'dNum': 255
+                    dNum: 255
                 }
             };
 
             const response = await soapClient.instance.call(callParams);
-            t.ok(response.data.NumberToDollarsResponse.NumberToDollarsResult, 'got a number conversion');
+            t.ok(
+                response.data.NumberToDollarsResponse.NumberToDollarsResult,
+                'got a number conversion'
+            );
             t.end();
         } catch (err) {
             t.end(err);
         }
     });
 
-    test('webservices.daehosting.com/services/isbnservice.wso', async (t) => {
+    test('webservices.daehosting.com/services/isbnservice.wso', async t => {
         try {
-            const soapClient = soapClients.find((item) => item.url === 'webservices.daehosting.com/services/isbnservice.wso');
+            const soapClient = soapClients.find(
+                item =>
+                    item.url === 'webservices.daehosting.com/services/isbnservice.wso'
+            );
             if (!soapClient) {
                 t.end('no soap client available');
             }
@@ -94,20 +115,27 @@
                     xmlns: 'http://webservices.daehosting.com/ISBN'
                 },
                 params: {
-                    'sISBN': '1491904240'
+                    sISBN: '1491904240'
                 }
             });
 
-            t.ok(response.data.IsValidISBN10Response.IsValidISBN10Result, 'checked ISBN');
+            t.ok(
+                response.data.IsValidISBN10Response.IsValidISBN10Result,
+                'checked ISBN'
+            );
             t.end();
         } catch (err) {
             t.end(err);
         }
     });
 
-    test('webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso', async (t) => {
+    test('webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso', async t => {
         try {
-            const soapClient = soapClients.find((item) => item.url === 'webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso');
+            const soapClient = soapClients.find(
+                item =>
+                    item.url ===
+          'webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso'
+            );
             if (!soapClient) {
                 t.end('no soap client available');
             }
@@ -118,19 +146,26 @@
                     xmlns: 'http://www.oorsprong.org/websamples.countryinfo'
                 },
                 params: {
-                    'sCountryISOCode': 'DE'
+                    sCountryISOCode: 'DE'
                 }
             });
 
-            t.ok(response.data.FullCountryInfoResponse.FullCountryInfoResult.length !== 0, 'country info recieved');
+            t.ok(
+                response.data.FullCountryInfoResponse.FullCountryInfoResult.length !==
+          0,
+                'country info recieved'
+            );
             t.end();
         } catch (err) {
             t.end(err);
         }
     });
 
-    test('getRequestXml.simple', async (t) => {
-        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+    test('getRequestXml.simple', async t => {
+        const soapClient = soapClients.find(
+            item =>
+                item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso'
+        );
         if (!soapClient) {
             t.end('no soap client available');
         }
@@ -149,21 +184,36 @@
         });
 
         const json = soapClient.instance.getXmlDataAsJson(xml);
+        console.log(json);
 
         t.ok(json.NumberToDollars, 'no "NumberToDollars" key');
-        t.ok(json.NumberToDollars.filter((i) => i['testParam1']).length === 1, 'found testParam1 only once');
-        t.ok(json.NumberToDollars.some((i) => i['testParam1'] && i['testParam1'] === '1'), 'testParam1 has value 1');
+        t.ok(
+            typeof json.NumberToDollars.testParam1 === 'string',
+            'found testParam1 only once'
+        );
+        t.ok(json.NumberToDollars.testParam1 === '1', 'testParam1 has value 1');
 
-        t.ok(json.NumberToDollars.filter((i) => i['testParam2']).length === 1, 'found testParam2 only once');
-        t.ok(json.NumberToDollars.some((i) => i['testParam2'] && i['testParam2'].length === 2), 'testParam2 has only 2 items');
-        t.ok(json.NumberToDollars.some((i) => i['testParam2'] && i['testParam2'].includes('2')), 'testParam2 has value 2');
-        t.ok(json.NumberToDollars.some((i) => i['testParam2'] && i['testParam2'].includes('3')), 'testParam2 has value 3');
+        t.ok(
+            json.NumberToDollars.testParam2.length === 2,
+            'testParam2 has only 2 items'
+        );
+        t.ok(
+            json.NumberToDollars.testParam2.includes('2'),
+            'testParam2 has value 2'
+        );
+        t.ok(
+            json.NumberToDollars.testParam2.includes('3'),
+            'testParam2 has value 3'
+        );
 
         t.end();
     });
 
-    test('getRequestXml.base', async (t) => {
-        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+    test('getRequestXml.base', async t => {
+        const soapClient = soapClients.find(
+            item =>
+                item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso'
+        );
         if (!soapClient) {
             t.end('no soap client available');
         }
@@ -183,36 +233,65 @@
                 testParam1: 1,
                 testParam2: [2, 3],
                 testParam3: {
-                    '_value'     : 4,
-                    '_attributes': {
-                        'attr1': '123',
-                        'attr2': '456',
-                        'attr3': '789'
+                    _value     : 4,
+                    _attributes: {
+                        attr1: '123',
+                        attr2: '456',
+                        attr3: '789'
                     }
                 },
                 testParam4: {
-                    '_attributes': {
-                        'attr1': '123',
-                        'attr2': '456',
-                        'attr3': '789'
+                    _attributes: {
+                        attr1: '123',
+                        attr2: '456',
+                        attr3: '789'
                     }
                 }
             }
         });
 
         const json = soapClient.instance.getXmlDataAsJson(xml);
+        console.log(JSON.stringify(json, null, 4));
 
         t.ok(json.NumberToDollars, 'no "NumberToDollars" key');
-        t.ok(json.NumberToDollars.filter((i) => i['testParam1']).length === 1, 'found testParam1 only once');
-        t.ok(json.NumberToDollars.filter((i) => i['testParam2']).length === 1, 'found testParam2 only once');
-        t.ok(json.NumberToDollars.filter((i) => i['testParam3']).length === 1, 'found testParam3 only once');
-        t.ok(json.NumberToDollars.filter((i) => i['testParam4']).length === 1, 'found testParam4 only once');
+        t.ok(
+            json.NumberToDollars.testParam1 !== undefined,
+            'found testParam1 only once'
+        );
+        t.ok(
+            json.NumberToDollars.testParam1.value === '1',
+            'testParam1 has value 1'
+        );
+
+        t.ok(
+            json.NumberToDollars.testParam2.length === 2,
+            'testParam2 has only 2 items'
+        );
+        t.ok(
+            json.NumberToDollars.testParam2[0].value === '2',
+            'testParam2 has value 2'
+        );
+        t.ok(
+            json.NumberToDollars.testParam2[1].value === '3',
+            'testParam2 has value 3'
+        );
+        t.ok(
+            typeof json.NumberToDollars.testParam3 === 'object',
+            'found testParam3 only once'
+        );
+        t.ok(
+            typeof json.NumberToDollars.testParam4 === 'object',
+            'found testParam4 only once'
+        );
 
         t.end();
     });
 
-    test('getRequestXml.base-deep', async (t) => {
-        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+    test('getRequestXml.base-deep', async t => {
+        const soapClient = soapClients.find(
+            item =>
+                item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso'
+        );
         if (!soapClient) {
             t.end('no soap client available');
         }
@@ -226,11 +305,11 @@
             params: {
                 testParam1: {
                     testParam1Deep: {
-                        '_value'     : 4,
-                        '_attributes': {
-                            'attr1': '123',
-                            'attr2': '456',
-                            'attr3': '789'
+                        _value     : 4,
+                        _attributes: {
+                            attr1: '123',
+                            attr2: '456',
+                            attr3: '789'
                         }
                     }
                 }
@@ -241,13 +320,19 @@
 
         t.ok(json.NumberToDollars, '"NumberToDollars" key');
         t.ok(json.NumberToDollars.testParam1, '"testParam1" key');
-        t.ok(json.NumberToDollars.testParam1.testParam1Deep, '"testParam1Deep" key');
+        t.ok(
+            json.NumberToDollars.testParam1.testParam1Deep,
+            '"testParam1Deep" key'
+        );
 
         t.end();
     });
 
-    test('getRequestXml.special', async (t) => {
-        const soapClient = soapClients.find((item) => item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso');
+    test('getRequestXml.special', async t => {
+        const soapClient = soapClients.find(
+            item =>
+                item.url === 'www.dataaccess.com/webservicesserver/numberconversion.wso'
+        );
         if (!soapClient) {
             t.end('no soap client available');
         }
