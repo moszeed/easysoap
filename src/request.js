@@ -71,6 +71,11 @@
                 value._attributes) {
                 attributes = Object.assign({}, attributes, value._attributes || {});
                 value = value._value || '';
+                if (Object(value) === value) {
+                    value = Object.keys(value)
+                        .map((valueKey) => getParamAsString(valueKey, value[valueKey], paramData, attributes))
+                        .join('');
+                }
             } else {
                 value = Object.keys(value)
                     .map((valueKey) => getParamAsString(valueKey, value[valueKey], paramData, attributes))
