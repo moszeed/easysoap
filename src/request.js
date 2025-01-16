@@ -222,6 +222,10 @@
     SoapRequest.prototype.call = async function (params = {}) {
         const self = this;
 
+        if (!params.gzip) {
+            params.gzip = false;
+        }
+
         // add custom headers
         if (params.headers) {
             if (Array.isArray(params.headers)) {
@@ -239,6 +243,7 @@
             body              : requestXml,
             headers           : this._headers,
             rejectUnauthorized: this._params.rejectUnauthorized,
+            gzip              : params.gzip,
             method            : 'POST'
         });
 

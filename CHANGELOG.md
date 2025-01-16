@@ -1,5 +1,8 @@
 # easysoap changelog
 
+## 2.3.0
+* change: add gzip as parameter
+
 ## 2.2.0
 * change: output gets more flatten
 
